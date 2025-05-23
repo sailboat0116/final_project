@@ -114,11 +114,4 @@ public class OthelloGameUI extends JFrame {
             }
         }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            GameFactory factory = new OthelloFactory();
-            new OthelloGameUI(factory);
-        });
-    }
 }

@@ -135,11 +135,34 @@ public class Main {
         game.play();
     }
 }*/
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            GameFactory factory = new GomokuFactory();
-            new GomokuGameUI(factory);
+            String[] options = {"五子棋 (Gomoku)", "黑白棋 (Othello)"};
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    "請選擇要玩的遊戲：",
+                    "選擇遊戲",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+
+            GameFactory factory;
+            if (choice == 0) {
+                factory = new GomokuFactory();
+                new GomokuGameUI(factory);
+            } else if (choice == 1) {
+                factory = new OthelloFactory();
+                new OthelloGameUI(factory);
+            } else {
+                System.exit(0); // 使用者關掉視窗或按取消
+            }
         });
     }
 }
+

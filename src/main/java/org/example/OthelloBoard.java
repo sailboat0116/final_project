@@ -79,14 +79,6 @@ public class OthelloBoard implements GameBoard {
         return false;
     }
 
-    public boolean hasAnyValidMove(String side) {
-        for (int i = 0; i < SIZE; i++)
-            for (int j = 0; j < SIZE; j++)
-                if (canPlace(i, j, side))
-                    return true;
-        return false;
-    }
-
     @Override
     public String getCell(int row, int col) {
         return board[row][col];
