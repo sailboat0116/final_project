@@ -1,8 +1,9 @@
 package org.example;
 
+import javax.swing.*;
 import java.util.*;
 
-abstract class AbstractGame {
+/*abstract class AbstractGame {
     abstract void setPlayers(Player p1, Player p2);
     abstract boolean gameOver();
     abstract boolean move(int row, int col);
@@ -132,5 +133,13 @@ public class Main {
         GomokuGame game = new GomokuGame();
         game.setPlayers(new Player("玩家1", 'X'), new Player("玩家2", 'O'));
         game.play();
+    }
+}*/
+public class Main {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            GameFactory factory = new GomokuFactory();
+            new GomokuGameUI(factory);
+        });
     }
 }
