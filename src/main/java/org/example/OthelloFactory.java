@@ -16,4 +16,3 @@ public class OthelloFactory implements GameFactory {
         return new Player(name, side);
     }
 }
-

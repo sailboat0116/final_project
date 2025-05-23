@@ -1,5 +1,7 @@
 package org.example;
 
+// --- Swing UI ---
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -7,7 +9,7 @@ import java.awt.event.MouseEvent;
 
 public class OthelloGameUI extends JFrame {
     private final GameBoard board;
-    private final GameRule rule;
+    private final OthelloRule rule; // 強制使用 OthelloRule 的擴充功能
     private final Player player1, player2;
     private Player currentPlayer;
     private boolean gameOver = false;
@@ -17,7 +19,7 @@ public class OthelloGameUI extends JFrame {
 
     public OthelloGameUI(GameFactory factory) {
         this.board = factory.createBoard();
-        this.rule = factory.createRule();
+        this.rule = (OthelloRule) factory.createRule(); // 向下轉型
         this.player1 = factory.createPlayer("玩家 1", "X");
         this.player2 = factory.createPlayer("玩家 2", "O");
         this.currentPlayer = player1;
@@ -42,23 +44,8 @@ public class OthelloGameUI extends JFrame {
                     if (board.placePiece(row, col, currentPlayer.side)) {
                         panel.repaint();
 
-                        if (rule.checkWin(((OthelloBoard) board).getBoardState(), currentPlayer.side)) {
-                            int black = countDiscs("X");
-                            int white = countDiscs("O");
-                            String result = "黑子: " + black + " 白子: " + white + "\n";
-
-                            if (black > white)
-                                result += "黑子勝利！";
-                            else if (white > black)
-                                result += "白子勝利！";
-                            else
-                                result += "平手！";
-
-                            JOptionPane.showMessageDialog(OthelloGameUI.this, result);
-                            gameOver = true;
-                        } else {
-                            currentPlayer = (currentPlayer == player1) ? player2 : player1;
-                        }
+                        // 換手
+                        switchTurnOrEnd(panel);
                     }
                 }
             }
@@ -69,13 +56,32 @@ public class OthelloGameUI extends JFrame {
         setVisible(true);
     }
 
-    private int countDiscs(String side) {
-        int count = 0;
+    private void switchTurnOrEnd(JPanel panel) {
+        Player opponent = (currentPlayer == player1) ? player2 : player1;
         String[][] state = ((OthelloBoard) board).getBoardState();
-        for (int i = 0; i < SIZE; i++)
-            for (int j = 0; j < SIZE; j++)
-                if (state[i][j].equals(side)) count++;
-        return count;
+
+        boolean opponentCanMove = rule.hasAnyValidMove(state, opponent.side);
+        boolean currentCanMove = rule.hasAnyValidMove(state, currentPlayer.side);
+
+        if (!currentCanMove && !opponentCanMove) {
+            gameOver = true;
+            panel.repaint();
+            int black = rule.countPieces(state, "X");
+            int white = rule.countPieces(state, "O");
+            String result = "黑子: " + black + " 白子: " + white + "\n";
+
+            switch (rule.getWinner(state)) {
+                case "X": result += "黑子勝利！"; break;
+                case "O": result += "白子勝利！"; break;
+                default:  result += "平手！"; break;
+            }
+
+            JOptionPane.showMessageDialog(OthelloGameUI.this, result);
+        } else if (opponentCanMove) {
+            currentPlayer = opponent;
+        } else {
+            JOptionPane.showMessageDialog(this, currentPlayer.side + " 繼續，對手無合法步！");
+        }
     }
 
     class GamePanel extends JPanel {
@@ -83,18 +89,15 @@ public class OthelloGameUI extends JFrame {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            // 背景
-            g.setColor(new Color(34, 139, 34)); // 綠色桌面
+            g.setColor(new Color(34, 139, 34));
             g.fillRect(0, 0, getWidth(), getHeight());
 
-            // 畫格線
             g.setColor(Color.BLACK);
             for (int i = 0; i <= SIZE; i++) {
                 g.drawLine(0, i * CELL_SIZE, SIZE * CELL_SIZE, i * CELL_SIZE);
                 g.drawLine(i * CELL_SIZE, 0, i * CELL_SIZE, SIZE * CELL_SIZE);
             }
 
-            // 畫棋子
             String[][] state = ((OthelloBoard) board).getBoardState();
             for (int row = 0; row < SIZE; row++) {
                 for (int col = 0; col < SIZE; col++) {
@@ -119,4 +122,3 @@ public class OthelloGameUI extends JFrame {
         });
     }
 }
-
