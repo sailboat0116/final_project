@@ -139,7 +139,9 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+        // Swing 的執行入口：在事件派發緒上執行 UI 初始化
         SwingUtilities.invokeLater(() -> {
+            // 顯示遊戲選單
             String[] options = {"五子棋 (Gomoku)", "黑白棋 (Othello)"};
             int choice = JOptionPane.showOptionDialog(
                     null,
@@ -149,16 +151,17 @@ public class Main {
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     options,
-                    options[0]
+                    options[0]   // 預設選項為 Gomoku
             );
 
             GameFactory factory;
+            // 根據使用者選擇，初始化對應的遊戲工廠與 UI
             if (choice == 0) {
                 factory = new GomokuFactory();
-                new GomokuGameUI(factory);
+                new GomokuGameUI(factory);   // 啟動五子棋 UI
             } else if (choice == 1) {
                 factory = new OthelloFactory();
-                new OthelloGameUI(factory);
+                new OthelloGameUI(factory);   // 啟動黑白棋 UI
             } else {
                 System.exit(0); // 使用者關掉視窗或按取消
             }
