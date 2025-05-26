@@ -1,0 +1,136 @@
+@startuml
+
+    interface GameFactory {
+        +createRule()
+        +createPlayer(name: String, side: String)
+        +createBoard()
+    }
+
+    interface GameBoard {
+        +reset()
+        +placePiece(row: int, col: int, side: String)
+        +getCell(row: int, col: int)
+    }
+
+    interface GameRule {
+        +checkWin(board: String[][] , side: String )
+    }
+
+    class GomokuBoard {
+        -board: String[][]
+        +GomokuBoard()
+        +reset()
+        +placePiece(row: int, col: int, side: String)
+        +getCell(row: int, col: int)
+        +getBoardState()
+    }
+
+    class GomokuFactory {
+        +createBoard()
+        +createRule()
+        +createPlayer(name: String, side: String)
+    }
+
+    class GomokuGameUI {
+        -board: GameBoard
+        -rule: GameRule
+        -player1: Player
+        -player2: Player
+        -currentPlayer: Player
+        -gameOver: boolean
+        -SIZE: int
+        -CELL_SIZE: int
+        +GomokuGameUI(factory: GameFactory)
+    }
+
+    class GamePanel {
+        +paintComponent(g: Graphics)
+    }
+
+    class GomokuGUI {
+        -SIZE: int
+        -CELL_SIZE: int
+        -board: char[][]
+        -turnX: boolean
+        -gameOver: boolean
+        +GomokuGUI()
+        -checkWinner(row: int, col: int) boolean
+        -countInDirection(row: int, col: int, dRow: int, dCol: int, symbol: char) int
+        +main(args: String[]) void
+    }
+
+    class GomokuRule {
+        +checkWin(board: String[][], side: String)
+        -checkDirection(board: String[][], side: String, r: int, c: int, dr: int, dc: int)
+    }
+
+    class Main {
+        +main(args: String[])
+    }
+
+    class OthelloBoard{
+        -SIZE: int
+        -board: String[][]
+        +OthelloBoard()
+        +reset()
+        +placePiece(row: int, col: int, side: String)
+        +canPlacePiece(row: int, col: int, side: String)
+        +getCell(row: int, col: int)
+        +getBoardState()
+    }
+
+    class OthelloFactory {
+        +createBoard()
+        +createRule()
+        +createPlayer(name: String, side: String)
+    }
+
+    class OthelloGameUI {
+        -board: GameBoard
+        -rule: OthelloRule
+        -player1: Player
+        -player2: Player
+        -currentPlayer: Player
+        -gameOver: boolean
+        -SIZE: int
+        -CELL_SIZE: int
+        +OthelloGameUI(factory: GameFactory)
+        +switchTurnOrEnd(panel: JPanel)
+    }
+
+    class OthelloRule {
+        +checkWin(board: String[][], side: String)
+        +hasAnyValidMoves(board: String[][], side: String)
+        +countPiece(board: String[][], side: String)
+        +getWinner(board: String[][])
+    }
+
+    class Player {
+        +name: String
+        +side: String
+    }
+
+    GameFactory <|.. GomokuFactory : implements
+    GameFactory <|.. OthelloFactory : implements
+    Main ..> GomokuFactory : creates
+    Main ..> OthelloFactory : creates
+    Main ..> GomokuGameUI : creates
+    Main ..> OthelloGameUI : creates
+    GomokuFactory ..> Player : creates
+    OthelloFactory ..> Player : creates
+    GomokuGameUI ..> GameFactory : uses
+    GameBoard <|.. GomokuBoard : implements
+    JFrame <|-- GomokuGameUI
+    GomokuGameUI *-- GamePanel
+    GomokuGameUI --> GameBoard
+    GomokuGameUI --> GameRule
+    GomokuGameUI --> Player
+    OthelloGameUI --> Player
+    GamePanel --|> JPanel
+    GomokuGUI *-- GamePanel
+    OthelloGameUI *-- GamePanel
+    GameBoard <|.. OthelloBoard : implements
+    OthelloRule ..> GameRule : implements
+    GomokuRule ..> GameRule : implements
+
+    @enduml
