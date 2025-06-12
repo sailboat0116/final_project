@@ -1,0 +1,22 @@
+@startuml
+    interface GameFactory {
+        +createRule()
+        +createPlayer(name: String, side: String)
+        +createBoard()
+    }
+
+    class GomokuFactory {
+        +createBoard()
+        +createRule()
+        +createPlayer(name: String, side: String)
+    }
+
+    class OthelloFactory {
+        +createBoard()
+        +createRule()
+        +createPlayer(name: String, side: String)
+    }
+
+GameFactory <|.. GomokuFactory : implements
+GameFactory <|.. OthelloFactory : implements
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+    interface GameBoard {
+        +reset()
+        +placePiece(row: int, col: int, side: String)
+        +getCell(row: int, col: int)
+    }
+
+    class GomokuBoard {
+        -board: String[][]
+        +GomokuBoard()
+        +reset()
+        +placePiece(row: int, col: int, side: String)
+        +getCell(row: int, col: int)
+        +getBoardState()
+    }
+
+    class OthelloBoard{
+        -SIZE: int
+        -board: String[][]
+        +OthelloBoard()
+        +reset()
+        +placePiece(row: int, col: int, side: String)
+        +canPlacePiece(row: int, col: int, side: String)
+        +getCell(row: int, col: int)
+        +getBoardState()
+    }
+
+GameBoard <|.. OthelloBoard : implements
+GameBoard <|.. GomokuBoard : implements
+@enduml

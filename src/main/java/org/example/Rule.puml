@@ -1,0 +1,20 @@
+@startuml
+    interface GameRule {
+        +checkWin(board: String[][] , side: String )
+    }
+
+    class GomokuRule {
+        +checkWin(board: String[][], side: String)
+        -checkDirection(board: String[][], side: String, r: int, c: int, dr: int, dc: int)
+    }
+
+    class OthelloRule {
+        +checkWin(board: String[][], side: String)
+        +hasAnyValidMoves(board: String[][], side: String)
+        +countPiece(board: String[][], side: String)
+        +getWinner(board: String[][])
+    }
+
+GameRule <|.. OthelloRule : implements
+GameRule <|.. GomokuRule : implements
+@enduml

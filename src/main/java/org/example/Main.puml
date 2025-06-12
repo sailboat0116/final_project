@@ -1,0 +1,46 @@
+@startuml
+    class GomokuFactory {
+        +createBoard()
+        +createRule()
+        +createPlayer(name: String, side: String)
+    }
+
+    class GomokuGameUI{
+        -board: GameBoard
+        -rule: GameRule
+        -player1: Player
+        -player2: Player
+        -currentPlayer: Player
+        -gameOver: boolean
+        -SIZE: int
+        -CELL_SIZE: int
+        +GomokuGameUI(factory: GameFactory)
+    }
+    class OthelloFactory {
+        +createBoard()
+        +createRule()
+        +createPlayer(name: String, side: String)
+    }
+
+    class OthelloGameUI{
+        -board: GameBoard
+        -rule: OthelloRule
+        -player1: Player
+        -player2: Player
+        -currentPlayer: Player
+        -gameOver: boolean
+        -SIZE: int
+        -CELL_SIZE: int
+        +OthelloGameUI(factory: GameFactory)
+        +switchTurnOrEnd(panel: JPanel)
+    }
+
+    class Main {
+        +main(args: String[])
+    }
+
+    Main ..> GomokuFactory : creates
+    Main ..> OthelloFactory : creates
+    Main ..> GomokuGameUI : creates
+    Main ..> OthelloGameUI : creates
+@enduml

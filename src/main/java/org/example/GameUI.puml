@@ -1,21 +1,5 @@
 @startuml
 
-    interface GameFactory {
-        +createRule()
-        +createPlayer(name: String, side: String)
-        +createBoard()
-    }
-
-    interface GameBoard {
-        +reset()
-        +placePiece(row: int, col: int, side: String)
-        +getCell(row: int, col: int)
-    }
-
-    interface GameRule {
-        +checkWin(board: String[][] , side: String )
-    }
-
     class GomokuBoard {
         -board: String[][]
         +GomokuBoard()
@@ -91,27 +75,10 @@
         +paintComponent(g: Graphics)
     }
 
-    class Main {
-        +main(args: String[])
-    }
-
     class Player {
         +name: String
         +side: String
     }
-
-
-    GameBoard <|.. GomokuBoard : implements
-    GameBoard <|.. OthelloBoard : implements
-    GameFactory <|.. GomokuFactory : implements
-    GameFactory <|.. OthelloFactory : implements
-    GameRule <|.. GomokuRule : implements
-    GameRule <|.. OthelloRule : implements
-
-    Main ..> GomokuFactory : creates
-    Main ..> OthelloFactory : creates
-    Main ..> GomokuGameUI : creates
-    Main ..> OthelloGameUI : creates
 
     GomokuFactory ..> Player : creates
     OthelloFactory ..> Player : creates
@@ -126,21 +93,5 @@
     OthelloGameUI *-- GamePanel
 
 
-'    GomokuGameUI --> GameBoard
-'    GomokuGameUI --> GameRule
-'    GomokuGameUI --> Player
-'    OthelloGameUI --> Player
 
-'    class GomokuGUI {
-'        -SIZE: int
-'        -CELL_SIZE: int
-'        -board: char[][]
-'        -turnX: boolean
-'        -gameOver: boolean
-'        +GomokuGUI()
-'        -checkWinner(row: int, col: int) boolean
-'        -countInDirection(row: int, col: int, dRow: int, dCol: int, symbol: char) int
-'        +main(args: String[]) void
-'    }
-
-    @enduml
+@enduml
